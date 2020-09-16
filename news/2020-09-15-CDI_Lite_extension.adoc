@@ -11,16 +11,13 @@ change_frequency: daily
 
 
 A few months back we shared our vision for CDI lite.
-To make it short the goal with CDI lite is to make the spec lighter, cloud-friendlier and allow for build-time implementations which are now on the rise.
-This will be done by identifying a subset of features that can be implemented in build time environment.
+In short, the goal with CDI lite is to make the spec lighter, cloud-friendlier and allow for build-time implementations which are now on the rise.
 
-The idea is to keep the CDI programming model everyone loves but allow implementations to produce lighter and faster binaries.
+When we started thinking about a “lite” variant of CDI, amenable to build-time processing, we understood that an alternative to Portable Extensions is necessary. A quick poll on the MicroProfile mailing list confirmed that.
 
-One issue we raised in the last post is that this build-time approach is not compatible with contemporary CDI portable extension model. Therefore, with existing CDI features we can only imagine CDI Lite without extension mechanism. Knowing the great popularity of portable extensions and their importance for integrators, we decided to revisit what could be done in that direction.
+We explored several variants of how the API might look like. This blog post shows one that, we believe, has the most potential. We call it _Build Compatible Extensions_, but the name, as everything else described here, is up for debate.
 
-We have worked to create a new extension SPI that could be used in Lite and today we are sharing this proposal with you. It is still a work in progress but should be a good enough starting point to design an extension mechanism for CDI lite.
-
-When we started thinking about a lite API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. Other bits and pieces are in various stages of construction, especially registering synthetic components. So, please, bear with us and submit feedback! (*TODO* where?)
+For our explorations of the API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. The other ones are significantly more rough, so bear with us please and submit feedback! (TODO where?)
 
 Before we start, we’d also like to note that in this text, we assume the reader (that is, you!) is familiar with CDI and preferably also Portable Extensions, as we expect some knowledge and don’t explain everything. We also make references to Portable Extensions on several occasions.
 
@@ -37,7 +34,7 @@ There are some constraints we put on these methods (such as: they must be `publi
 When exactly are the extensions invoked can’t be defined in too much detail, because we want implementations to be able to invoke them at build time (e.g. during application compilation) or runtime (e.g. during application deployment). It certainly happens before the application starts. Extensions in earlier phases are guaranteed to run before extensions in later phases.
 
 
-Extension methods can declare an arbitrary number of parameters, all of which are supplied by the container. There’s a set of predefined types of parameters for each phase, and all implementations would have to support that. We’re also thinking of designing an SPI that would allow anyone to contribute support for other types of parameters.
+Extensions can declare an arbitrary number of parameters, all of which are supplied by the container. There’s a set of predefined types of parameters for each phase, and all implementations would have to support that. We’re also thinking of designing an SPI that would allow anyone to contribute support for other types of parameters.
 A class can declare multiple extension methods, in which case they are all invoked on a single instance of the class. If you need to control order of extension invocations, there’s an annotation *`@ExtensionPriority`* just for that.
 This is a lot of text already, so let’s take a look at an example:
 
@@ -94,7 +91,7 @@ class MyBarService implements MyService {
 }
 ----
 
-===4. A class that uses the service
+==== A class that uses the service
 
 [source,java]
 ----
