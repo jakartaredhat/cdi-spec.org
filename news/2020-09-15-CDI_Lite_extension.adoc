@@ -11,15 +11,16 @@ change_frequency: daily
 
 
 A few months back we shared our vision for CDI lite.
-To make it short the goal with CDI lite is to make the spec cloud native. This will be done by identifying a features' subset that can be implemented with a build time only approach (no more runtime proxies and other “magic” requirements) .
+To make it short the goal with CDI lite is to make the spec lighter, cloud-friendlier and allow for build-time implementations which are now on the rise.
+This will be done by identifying a subset of features that can be implemented in build time environment.
 
-The idea is to keep the CDI programming model everyone loves but allow implementation to produce lighter and faster binaries.
+The idea is to keep the CDI programming model everyone loves but allow implementations to produce lighter and faster binaries.
 
-One issue we raised in the last post is that this build-time approach is not compatible with CDI portable extension. So, with current CDI features we can only imagine CDI Lite without extension mechanism. Knowing the great popularity of portable extensions, it was a capability we needed to revisit in our initial proposal.
+One issue we raised in the last post is that this build-time approach is not compatible with contemporary CDI portable extension model. Therefore, with existing CDI features we can only imagine CDI Lite without extension mechanism. Knowing the great popularity of portable extensions and their importance for integrators, we decided to revisit what could be done in that direction.
 
-It’s the reason why we worked to propose a new extension mechanism for CDI Lite. Today we are sharing this proposal with you as it is still a work in progress but seems ready to be a strong starting point to design an extension mechanism for CDI lite.
+We have worked to create a new extension SPI that could be used in Lite and today we are sharing this proposal with you. It is still a work in progress but should be a good enough starting point to design an extension mechanism for CDI lite.
 
-When we started thinking about a lite API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. The other ones are significantly more rough, so bear with us please and submit feedback! (*TODO* where?)
+When we started thinking about a lite API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. Other bits and pieces are in various stages of construction, especially registering synthetic components. So, please, bear with us and submit feedback! (*TODO* where?)
 
 Before we start, we’d also like to note that in this text, we assume the reader (that is, you!) is familiar with CDI and preferably also Portable Extensions, as we expect some knowledge and don’t explain everything. We also make references to Portable Extensions on several occasions.
 
@@ -34,8 +35,10 @@ In our proposal, Build Compatible Extensions are simply methods annotated with a
 
 There are some constraints we put on these methods (such as: they must be `public`), but they should be pretty obvious and shouldn’t be limiting anyone. The container automatically finds extensions and invokes them when time is right.
 When exactly are the extensions invoked can’t be defined in too much detail, because we want implementations to be able to invoke them at build time (e.g. during application compilation) or runtime (e.g. during application deployment). It certainly happens before the application starts. Extensions in earlier phases are guaranteed to run before extensions in later phases.
-These methods can declare an arbitrary number of parameters, all of which are supplied by the container. There’s a set of predefined types of parameters for each phase, and all implementations would have to support that. We’re also thinking of designing an SPI that would allow anyone to contribute support for other types of parameters.
-A class can declare multiple extensions, in which case they are all invoked on a single instance of the class. If you need to control order of extension invocations, there’s an annotation *`@ExtensionPriority`* just for that.
+
+
+Extension methods can declare an arbitrary number of parameters, all of which are supplied by the container. There’s a set of predefined types of parameters for each phase, and all implementations would have to support that. We’re also thinking of designing an SPI that would allow anyone to contribute support for other types of parameters.
+A class can declare multiple extension methods, in which case they are all invoked on a single instance of the class. If you need to control order of extension invocations, there’s an annotation *`@ExtensionPriority`* just for that.
 This is a lot of text already, so let’s take a look at an example:
 
 [source,java]
@@ -48,9 +51,9 @@ public class MyExtension {
 }
 ----
 
-This doesn’t really do anything, just prints a message whenever the extension is executed. Let’s create something more interesting. Say, moving a qualifier annotation from one class to another. Let’s assume that we have these classes in our application:
+This doesn’t really do anything, just prints a message whenever the extension is executed. Let’s create something more interesting. Say, moving a qualifier annotation from one class to another. Let’s assume that we have these classes in our application.
 
-* *A qualifier annotation*
+==== A qualifier annotation:
 
 [source,java]
 ----
@@ -60,7 +63,7 @@ This doesn’t really do anything, just prints a message whenever the extension 
 }
 ----
 
-* *A service interface*
+==== A service interface:
 
 [source,java]
 ----
@@ -69,7 +72,7 @@ interface MyService {
 }
 ----
 
-* *Two implementations, one with qualifier and the other unqualified*
+==== Two implementations, one with qualifier and the other unqualified:
 
 [source,java]
 ----
@@ -91,7 +94,7 @@ class MyBarService implements MyService {
 }
 ----
 
-* *A class that uses the service*
+===4. A class that uses the service
 
 [source,java]
 ----
@@ -280,5 +283,5 @@ cd quarkus-fork
 ----
 
 Wait a few minutes or more, depending on how many Quarkus dependencies you already have in your local Maven repository. When the build finishes, you can add a dependency on `io.quarkus.arc:cdi-lite-ext-api:999-SNAPSHOT` to your project and play. Don’t forget to also bump other Quarkus dependencies, as well as the Quarkus Maven plugin, to `999-SNAPSHOT`!
-As mentioned before, we are very keen on hearing your feedback. Please file issues in the *TODO* GitHub repository, or send an email to the *TODO* mailing list. Let’s work together on making these new Build Compatible Extensions a reality!
+As mentioned before, we are very keen on hearing your feedback. Please file issues in the *TODO* GitHub repository. Let’s work together on making these new Build Compatible Extensions a reality!
 
