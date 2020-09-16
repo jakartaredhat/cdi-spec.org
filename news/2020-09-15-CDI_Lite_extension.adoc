@@ -17,7 +17,8 @@ When we started thinking about a “lite” variant of CDI, amenable to build-ti
 
 We explored several variants of how the API might look like. This blog post shows one that, we believe, has the most potential. We call it _Build Compatible Extensions_, but the name, as everything else described here, is up for debate.
 
-For our explorations of the API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. The other ones are significantly more rough, so bear with us please and submit feedback! (TODO where?)
+For our explorations of the API design space, we mostly constrained ourselves to one particularly common use case: annotation transformations. Many things that Portable Extensions allow can be achieved simply by adding an annotation here or removing an annotation there. We know that other transformations are necessary, but the API for annotation transformation is the most developed proposal we have. The other ones are significantly more rough, so bear with us please and submit feedback!
+You can do that in form of a GitHub issue against the https://github.com/eclipse-ee4j/cdi/issues[CDI repository] and add the `lite-extension-api` label to your issue.
 
 Before we start, we’d also like to note that in this text, we assume the reader (that is, you!) is familiar with CDI and preferably also Portable Extensions, as we expect some knowledge and don’t explain everything. We also make references to Portable Extensions on several occasions.
 
@@ -274,11 +275,11 @@ We’re publishing the Quarkus fork in the form of a GitHub repository so that y
 
 [source,console]
 ----
-git clone https://github.com/Ladicek/quarkus-fork.git TODO
+git clone https://github.com/Ladicek/quarkus-fork.git
 cd quarkus-fork
 ./mvnw -Dquickly
 ----
 
 Wait a few minutes or more, depending on how many Quarkus dependencies you already have in your local Maven repository. When the build finishes, you can add a dependency on `io.quarkus.arc:cdi-lite-ext-api:999-SNAPSHOT` to your project and play. Don’t forget to also bump other Quarkus dependencies, as well as the Quarkus Maven plugin, to `999-SNAPSHOT`!
-As mentioned before, we are very keen on hearing your feedback. Please file issues in the *TODO* GitHub repository. Let’s work together on making these new Build Compatible Extensions a reality!
+As mentioned before, we are very keen on hearing your feedback. Please file issues in the https://github.com/eclipse-ee4j/cdi/issues[CDI GitHub repository] with label `lite-extension-api`. Let’s work together on making these new Build Compatible Extensions a reality!
 
