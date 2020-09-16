@@ -51,7 +51,7 @@ public class MyExtension {
 
 This doesn’t really do anything, just prints a message whenever the extension is executed. Let’s create something more interesting. Say, moving a qualifier annotation from one class to another. Let’s assume that we have these classes in our application.
 
-==== A qualifier annotation:
+=== A qualifier annotation:
 
 [source,java]
 ----
@@ -61,7 +61,7 @@ This doesn’t really do anything, just prints a message whenever the extension 
 }
 ----
 
-==== A service interface:
+=== A service interface:
 
 [source,java]
 ----
@@ -70,7 +70,7 @@ interface MyService {
 }
 ----
 
-==== Two implementations, one with qualifier and the other unqualified:
+=== Two implementations, one with qualifier and the other unqualified:
 
 [source,java]
 ----
@@ -92,7 +92,7 @@ class MyBarService implements MyService {
 }
 ----
 
-==== A class that uses the service
+=== A class that uses the service
 
 [source,java]
 ----
