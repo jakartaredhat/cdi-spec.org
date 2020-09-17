@@ -13,7 +13,7 @@ change_frequency: daily
 A few months back we shared our vision for CDI lite.
 In short, the goal with CDI lite is to make the spec lighter, cloud-friendlier and allow for build-time implementations which are now on the rise.
 
-When we started thinking about a “lite” variant of CDI, amenable to build-time processing, we understood that an alternative to Portable Extensions is necessary. A quick poll on the MicroProfile mailing list confirmed that.
+When we started thinking about a “lite” variant of CDI, amenable to build-time processing, we understood that an alternative to Portable Extensions is necessary. Subsequent discussion on the MicroProfile mailing list confirmed that.
 
 We explored several variants of how the API might look like. This blog post shows one that, we believe, has the most potential. We call it _Build Compatible Extensions_, but the name, as everything else described here, is up for debate.
 
@@ -270,13 +270,17 @@ In case a validation error is added, the container will prevent the application 
 
 == Conclusion
 
-You have just finished a deep dive into our current Build Compatible Extensions API proposal. Together with the API proposal, we also developed a proof-of-concept implementation in Quarkus, so that we know this API can be implemented. This proof of concept focuses solely on the `@Enhancement` phase, but that should be enough for now.
+You have just finished a deep dive into our current Build Compatible Extensions API proposal.
+
+Together with the API proposal, we also developed a proof-of-concept implementation in Quarkus, so that we know this API can be implemented, and that it is indeed build-time compatible. This proof of concept focuses solely on the `@Enhancement` phase, but that should be enough for now.  It's also worth noting that there is nothing Quarkus specific about the API. We believe (and our goal) is that any CDI-Lite implementation could adopt it using a variety of implementation strategies.
+
 We’re publishing the Quarkus fork in the form of a GitHub repository so that you can also experiment with it. Please bear in mind that the POC implementation is very rough and definitely is not production ready. It should be enough to evaluate the API proposal, though. Here’s how you can get your hands on it:
 
 [source,console]
 ----
 git clone https://github.com/Ladicek/quarkus-fork.git
 cd quarkus-fork
+git checkout experiment-cdi-lite-ext
 ./mvnw -Dquickly
 ----
 
